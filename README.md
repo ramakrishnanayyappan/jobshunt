@@ -1,4 +1,4 @@
-# JobShunt: AI-Powered Local Job Search & Résumé Assistant.
+# JobShunt: AI-Powered Local Job Search & Resume Assistant.
 
 ## Overview
 
