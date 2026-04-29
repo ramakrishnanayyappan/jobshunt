@@ -1309,7 +1309,7 @@ export default function JobHunt() {
         <p className="portico-section-title mb-2" style={{ letterSpacing: '0.14em' }}>
           Local
         </p>
-        <h1 className="portico-page-title">JobShunt</h1>
+        <h1 className="portico-page-title">JobsHunt</h1>
         <p className="portico-page-lead">
           Structured <strong>offer evaluation</strong>, pipeline tracking, optional story bank and batch — uses your
           configured LLM (OpenAI, Anthropic, OpenRouter, etc.).
@@ -1336,7 +1336,7 @@ export default function JobHunt() {
           className={`btn btn-sm ${chatOpen ? 'btn-info' : 'btn-outline-info'}`}
           onClick={() => setChatOpen((v) => !v)}
         >
-          {chatOpen ? 'Hide copilot' : 'JobShunt copilot'}
+          {chatOpen ? 'Hide copilot' : 'JobsHunt copilot'}
         </button>
         {chatOpen ? (
           <label className="small text-secondary mb-0 d-flex align-items-center gap-2">
@@ -1449,7 +1449,7 @@ export default function JobHunt() {
         <div className="portico-card-body">
           <p className="small text-secondary mb-3">
             On macOS, use Finder to pick a <strong>folder</strong> (all .txt, .md, .docx, .pdf inside are
-            scanned) or a <strong>single résumé file</strong>. Paths are saved to your JobShunt config.
+            scanned) or a <strong>single résumé file</strong>. Paths are saved to your JobsHunt config.
           </p>
           <label className="form-label small text-white-50 mb-0">Résumé vault path (folder or file)</label>
           <input
@@ -1481,7 +1481,7 @@ export default function JobHunt() {
             Export / metadata hint folder (optional)
           </label>
           <p className="small text-secondary mb-1">
-            Run artifacts still go under local JobShunt data. This path is stored for your reference and run
+            Run artifacts still go under local JobsHunt data. This path is stored for your reference and run
             metadata; leave empty for the default exports location.
           </p>
           <input
@@ -1642,7 +1642,7 @@ export default function JobHunt() {
               }
             />
             <label className="form-check-label small text-secondary" htmlFor="vaultSummaryToggle">
-              Use vault summary for JobShunt drafting (instead of sending all résumé files).
+              Use vault summary for JobsHunt drafting (instead of sending all résumé files).
             </label>
           </div>
           <div className="form-check mb-2">
@@ -1875,7 +1875,7 @@ export default function JobHunt() {
             ) : null}
           </div>
           <p className="small text-secondary px-3 pb-3 mb-0">
-            Run <code>{exports.run_id}</code> — files also on disk under your JobShunt data directory.
+            Run <code>{exports.run_id}</code> — files also on disk under your JobsHunt data directory.
           </p>
         </div>
       ) : null}

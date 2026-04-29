@@ -78,7 +78,7 @@ export default function Layout() {
             JH
           </div>
           <div>
-            <div className="portico-kicker">JobShunt</div>
+            <div className="portico-kicker">JobsHunt</div>
             <div className="portico-sidebar-title">Local assistant</div>
             <p className="portico-sidebar-tagline mb-0">Résumé vault · pipeline · LLM</p>
           </div>
@@ -92,7 +92,7 @@ export default function Layout() {
             <span className="portico-nav-ico">
               <IconBriefcase />
             </span>
-            JobShunt
+            JobsHunt
           </NavLink>
           <NavLink
             to="/settings/ai"

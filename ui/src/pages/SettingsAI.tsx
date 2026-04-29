@@ -254,7 +254,7 @@ export default function SettingsAI() {
   const saveAgentRouting = () => {
     if (!s) return;
     if (s.saved_profiles.length > 0 && !s.agent_llm.jobshunt.primary_profile_id) {
-      setErr('Choose a primary saved model for JobShunt (or remove all saved profiles).');
+      setErr('Choose a primary saved model for JobsHunt (or remove all saved profiles).');
       return;
     }
     setErr('');
@@ -400,16 +400,16 @@ export default function SettingsAI() {
 
       <div className="portico-card mb-4">
         <div className="portico-card-header portico-card-header--readable">
-          <span>JobShunt model</span>
+          <span>JobsHunt model</span>
         </div>
         <div className="portico-card-body">
           <p className="small text-secondary mb-3">
-            JobShunt uses only the <strong>primary</strong> and <strong>fallback</strong> models you set here — not the
+            JobsHunt uses only the <strong>primary</strong> and <strong>fallback</strong> models you set here — not the
             “Switch” row highlight. The connection form below is for editing saved profiles and testing; the agent does not
             fall back to it automatically. Add fallbacks to try another profile if the primary request fails.
           </p>
           {(
-            [['jobshunt', 'JobShunt']] as const
+            [['jobshunt', 'JobsHunt']] as const
           ).map(([agentKey, label]) => (
             <div key={agentKey} className="mb-4 pb-3 border-bottom border-light">
               <div className="row g-2 align-items-end">
@@ -633,7 +633,7 @@ export default function SettingsAI() {
                       openrouter.ai
                     </a>
                     . Model ids look like <code className="small">openai/gpt-4o-mini</code> or{' '}
-                    <code className="small">anthropic/claude-3.5-sonnet</code>. JobShunt sends default{' '}
+                    <code className="small">anthropic/claude-3.5-sonnet</code>. JobsHunt sends default{' '}
                     <code className="small">HTTP-Referer</code> and <code className="small">X-Title</code> unless you override them
                     in the headers table (OpenRouter recommends these; missing values sometimes cause 429). If you see 429, check
                     credits and rate limits on your OpenRouter account — the activity log may not show rejected edge requests. Models ending in `:free` share upstream quotas (Google, etc.); 429 can happen with credits still available — use a paid route or BYOK under Integrations.
