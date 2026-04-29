@@ -1,0 +1,574 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* —— UI tokens (class names `portico-*` are legacy from upstream styling) —— */
+:root {
+  --portico-font-sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --portico-font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  --portico-bg: #e8ecf4;
+  --portico-bg-mesh: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 50%, rgba(124, 58, 237, 0.06), transparent),
+    radial-gradient(ellipse 50% 30% at 0% 80%, rgba(14, 165, 233, 0.08), transparent);
+  --portico-surface: #ffffff;
+  --portico-surface-2: #f8fafc;
+  --portico-border: rgba(15, 23, 42, 0.08);
+  --portico-border-strong: rgba(15, 23, 42, 0.12);
+
+  --portico-text: #0f172a;
+  --portico-text-secondary: #475569;
+  --portico-text-muted: #64748b;
+
+  --portico-accent: #5b4fd8;
+  --portico-accent-2: #7c3aed;
+  --portico-accent-soft: rgba(91, 79, 216, 0.12);
+  --portico-accent-glow: rgba(91, 79, 216, 0.35);
+
+  --portico-sidebar-bg: linear-gradient(168deg, #0c0e14 0%, #151a26 45%, #12161f 100%);
+  --portico-sidebar-highlight: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(124, 58, 237, 0.08));
+  --portico-nav-active: linear-gradient(90deg, rgba(99, 102, 241, 0.35) 0%, rgba(99, 102, 241, 0.08) 100%);
+
+  --portico-radius: 14px;
+  --portico-radius-sm: 10px;
+  --portico-radius-xs: 6px;
+
+  --portico-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.06);
+  --portico-shadow-hover: 0 4px 12px rgba(15, 23, 42, 0.08), 0 12px 32px rgba(99, 102, 241, 0.12);
+  --portico-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  /* Bootstrap 5.3 integration */
+  --bs-body-font-family: var(--portico-font-sans);
+  --bs-body-bg: var(--portico-bg);
+  --bs-body-color: var(--portico-text);
+  --bs-primary: #5b4fd8;
+  --bs-primary-rgb: 91, 79, 216;
+  --bs-link-color: #4f46e5;
+  --bs-link-hover-color: #4338ca;
+  --bs-border-color: var(--portico-border);
+  --bs-border-radius: 10px;
+  --bs-border-radius-sm: 8px;
+  --bs-border-radius-lg: 14px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+@keyframes portico-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1, 'ss01' 1;
+}
+
+/* —— App shell —— */
+.portico-content {
+  min-width: 0;
+  position: relative;
+  background: var(--portico-bg) var(--portico-bg-mesh);
+  background-attachment: fixed;
+}
+
+.portico-content-inner {
+  width: 100%;
+  max-width: min(1600px, 100%);
+  margin: 0 auto;
+  padding-left: clamp(0.4rem, 1.2vw, 1rem);
+  padding-right: clamp(0.4rem, 1.2vw, 1rem);
+}
+
+/* —— Sidebar —— */
+.portico-sidebar {
+  width: 100%;
+  min-height: auto;
+  background: var(--portico-sidebar-bg);
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.12);
+  position: relative;
+  z-index: 2;
+}
+
+.portico-sidebar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--portico-sidebar-highlight);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.portico-sidebar-brand {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem 1.25rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.portico-logo-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+  box-shadow: 0 4px 14px var(--portico-accent-glow);
+  letter-spacing: -0.02em;
+}
+
+.portico-kicker {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 0.25rem;
+}
+
+.portico-sidebar-title {
+  color: #f8fafc;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.portico-sidebar-tagline {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+}
+
+.portico-nav {
+  position: relative;
+  z-index: 1;
+  padding: 1rem 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.portico-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.58) !important;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.portico-nav-link:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.portico-nav-link.active {
+  color: #fff !important;
+  background: var(--portico-nav-active);
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2) inset;
+}
+
+.portico-nav-ico {
+  width: 1.35rem;
+  text-align: center;
+  opacity: 0.9;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.portico-sidebar-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 768px) {
+  .portico-sidebar {
+    width: 272px;
+    min-width: 272px;
+    min-height: 100vh;
+  }
+}
+
+/* —— Page chrome —— */
+.portico-page-header {
+  margin-bottom: 1.75rem;
+}
+
+.portico-page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--portico-text);
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+}
+
+.portico-page-lead {
+  color: var(--portico-text-secondary);
+  font-size: 1rem;
+  line-height: 1.55;
+  max-width: 52rem;
+  margin: 0;
+}
+
+.portico-code-inline {
+  font-family: var(--portico-font-mono);
+  font-size: 0.85em;
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  background: var(--portico-surface-2);
+  border: 1px solid var(--portico-border);
+  color: #334155;
+}
+
+/* —— Cards —— */
+.portico-card {
+  background: var(--portico-surface);
+  border: 1px solid var(--portico-border);
+  border-radius: var(--portico-radius);
+  box-shadow: var(--portico-shadow), var(--portico-shadow-inset);
+  overflow: hidden;
+}
+
+.portico-card--lift:hover {
+  box-shadow: var(--portico-shadow-hover);
+  border-color: rgba(99, 102, 241, 0.12);
+}
+
+.portico-card-header {
+  padding: 0.9rem 1.15rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+  color: var(--portico-text);
+  background: linear-gradient(180deg, var(--portico-surface) 0%, #fafbfc 100%);
+  border-bottom: 1px solid var(--portico-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.portico-card-header--accent {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(124, 58, 237, 0.04) 100%);
+  border-bottom-color: rgba(99, 102, 241, 0.15);
+}
+
+.portico-card-header--warn {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(251, 191, 36, 0.04) 100%);
+  border-bottom-color: rgba(245, 158, 11, 0.2);
+}
+
+.portico-card-header--info {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(56, 189, 248, 0.04) 100%);
+  border-bottom-color: rgba(14, 165, 233, 0.2);
+}
+/* Solid, high-contrast headers (tables / metadata — easier to read than tinted gradients) */
+.portico-card-header--readable {
+  background: #e2e8f0;
+  color: #0f172a;
+  border-bottom: 1px solid #cbd5e1;
+  font-weight: 600;
+}
+
+[data-bs-theme='dark'] .portico-card-header--readable {
+  background: #1e293b;
+  color: #f8fafc;
+  border-bottom-color: #334155;
+}
+
+.portico-card-body {
+  padding: 1.15rem 1.25rem;
+}
+
+.portico-card-body--flush {
+  padding: 0;
+}
+
+/* —— Tables —— */
+.portico-table-wrap {
+  border-radius: 0 0 var(--portico-radius-sm) var(--portico-radius-sm);
+}
+
+table.portico-table {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+table.portico-table thead th {
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--portico-text-muted);
+  border-bottom: 1px solid var(--portico-border);
+  background: #f8fafc;
+  padding: 0.65rem 0.9rem;
+  white-space: nowrap;
+}
+
+table.portico-table tbody td {
+  padding: 0.65rem 0.9rem;
+  vertical-align: middle;
+  border-color: var(--portico-border);
+}
+
+table.portico-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.03);
+}
+
+/* —— Section labels —— */
+.portico-section-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--portico-text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.portico-border-accent {
+  border-left: 3px solid var(--portico-accent);
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* —— Agent / feature cards —— */
+.portico-tile {
+  position: relative;
+  height: 100%;
+  background: var(--portico-surface);
+  border: 1px solid var(--portico-border);
+  border-radius: var(--portico-radius);
+  padding: 1.35rem 1.35rem 1.25rem;
+  box-shadow: var(--portico-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+a.portico-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--portico-shadow-hover);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: inherit;
+}
+
+.portico-tile-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  margin-bottom: 1rem;
+  background: var(--portico-accent-soft);
+  line-height: 1;
+}
+
+.portico-tile h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.02em;
+}
+
+/* —— Pending review rows —— */
+.portico-pending {
+  background: var(--portico-surface-2);
+  border: 1px solid var(--portico-border);
+  border-radius: var(--portico-radius-sm);
+  padding: 1.1rem 1.15rem;
+  margin-bottom: 0.9rem;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+/* —— Badges refinement —— */
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.4em 0.65em;
+  border-radius: 7px;
+}
+
+/* —— Form controls —— */
+.form-control,
+.form-select {
+  border-color: var(--portico-border-strong);
+  border-radius: var(--portico-radius-xs);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.12);
+}
+
+.btn {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: var(--portico-radius-xs);
+  padding: 0.5rem 1rem;
+}
+
+.btn-sm {
+  border-radius: 7px;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* —— Alerts —— */
+.alert {
+  border-radius: var(--portico-radius-sm);
+  border: 1px solid transparent;
+  box-shadow: var(--portico-shadow);
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+  border-color: rgba(14, 165, 233, 0.2);
+  color: #0c4a6e;
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: #065f46;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #991b1b;
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: #92400e;
+}
+
+.alert-secondary {
+  background: #f1f5f9;
+  border-color: var(--portico-border);
+  color: var(--portico-text-secondary);
+}
+
+/* —— Log / code —— */
+pre.portico-log {
+  max-height: 22rem;
+  font-family: var(--portico-font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  background: linear-gradient(180deg, #0f1419 0%, #0d1117 100%);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--portico-radius-sm);
+  padding: 1.1rem 1.15rem;
+  overflow: auto;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* —— Modal —— */
+.modal-content {
+  border: 1px solid var(--portico-border);
+  border-radius: var(--portico-radius);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom-color: var(--portico-border);
+  padding: 1rem 1.25rem;
+  background: linear-gradient(180deg, #fff 0%, #fafbfc 100%);
+}
+
+/* —— Legacy / Bootstrap card base —— */
+.card {
+  box-shadow: var(--portico-shadow);
+  border: 1px solid var(--portico-border);
+  border-radius: var(--portico-radius);
+  background: var(--portico-surface);
+  overflow: hidden;
+}
+
+.card-header {
+  border-bottom-color: var(--portico-border);
+  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+  font-weight: 600;
+}
+
+
+/* —— Scroll panels (long scan / needs lists) —— */
+.portico-panel-scroll {
+  max-height: min(50vh, 32rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* —— Dark mode (data-bs-theme on html) —— */
+[data-bs-theme='dark'] {
+  --portico-bg: #0f1419;
+  --portico-bg-mesh: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent);
+  --portico-surface: #1a1f2e;
+  --portico-surface-2: #151a26;
+  --portico-border: rgba(255, 255, 255, 0.08);
+  --portico-border-strong: rgba(255, 255, 255, 0.12);
+  --portico-text: #e8ecf4;
+  --portico-text-secondary: #a8b0c4;
+  --portico-text-muted: #7e8aa1;
+  --portico-code-inline-border: var(--portico-border);
+}
+[data-bs-theme='dark'] .portico-code-inline {
+  background: var(--portico-surface-2);
+  color: #cbd5e1;
+  border-color: var(--portico-border);
+}
+[data-bs-theme='dark'] table.portico-table thead th {
+  background: #151a24;
+  color: var(--portico-text-muted);
+}
+[data-bs-theme='dark'] .portico-pending,
+[data-bs-theme='dark'] .portico-card {
+  background: var(--portico-surface);
+}
+[data-bs-theme='dark'] .modal-content {
+  background: var(--portico-surface);
+}

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jobshunt"
+version = "0.1.0"
+description = "Local JobShunt assistant: résumé vault, tailored drafts, pipeline (UI + FastAPI)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.32.0",
+  "watchdog>=4.0.0",
+  "pydantic>=2.0.0",
+  "pydantic-settings>=2.0.0",
+  "pyyaml>=6.0.0",
+  "httpx>=0.27.0",
+  "openai>=1.0.0",
+  "anthropic>=0.40.0",
+  "click>=8.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0", "ruff>=0.8.0"]
+export = ["reportlab>=4.0.0", "python-docx>=1.0.0", "pypdf>=4.0.0"]
+scout = ["playwright>=1.40.0"]
+
+[project.scripts]
+jobshunt = "jobshunt.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

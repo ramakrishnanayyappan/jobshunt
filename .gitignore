@@ -1,0 +1,24 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+# Build / packaging (regenerates from pyproject)
+*.egg-info/
+src/*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local config and runtime (never commit real API keys or personal paths)
+config.yaml
+*.local.yaml
+.env
+.env.*
+
+# Frontend
+ui/node_modules/
+
+# OS
+.DS_Store

@@ -1,0 +1,49 @@
+# Copy to your real config path and edit (see README). Do not commit secrets.
+#
+# Default locations:
+#   macOS/Linux: ~/.config/jobshunt/config.yaml and ~/.local/share/jobshunt/
+#   Windows: %APPDATA%\JobShunt\config.yaml and %LOCALAPPDATA%\JobShunt\data\
+# Override both with JOBSHUNT_HOME=/path → /path/config.yaml and /path/data/
+# Legacy paths (~/.config/jobhunt, JOBHUNT_HOME) are still read if the new files do not exist.
+
+jobshunt:
+  resume_vault_path: '~/Documents/resumes'
+  output_path: ''
+  max_vault_chars: 80000
+  max_vault_files: 40
+  display_name_title_case: true
+  apply_helper_script: ''
+  allow_apply_subprocess: false
+  user_preferences: []
+  archetype_hints: []
+  evaluation_dimension_weights: {}
+  use_story_bank_in_draft: false
+  scout_enabled: false
+  use_vault_summary_for_context: false
+  vault_summary_path: ''
+  block_draft_when_vault_summary_stale: true
+  auto_refine_after_draft: false
+
+ai:
+  provider: openai
+  base_url: ''
+  api_key: ''
+  model: gpt-4o-mini
+  headers: []
+  temperature: 0.7
+  max_tokens: 4096
+  openai_use_v1_prefix: true
+  api_format: openai
+
+agent_llm:
+  jobshunt:
+    primary_profile_id: null
+    fallback_profile_ids: []
+
+llm_profiles: []
+active_llm_profile_id: null
+
+http:
+  host: '127.0.0.1'
+  port: 8765
+  static_dir: null
