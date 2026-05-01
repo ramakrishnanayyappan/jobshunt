@@ -1,5 +1,3 @@
-<img src="images/JobsHunt_Logo.png" alt="JobShunt Logo" width="200" style="background-color: white; padding: 2px; ">
-
 # JobShunt: AI-Powered Local Job Search & Resume Assistant.
 
 ## Overview
