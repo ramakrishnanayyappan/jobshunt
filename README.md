@@ -2,7 +2,7 @@
 
 ## Overview
 
-**JobShunt** is a **local** web app for organizing a job search around your own résumé materials and LLM providers. A **FastAPI** server and **React** UI run on your computer. You add API credentials and model choices in config; the app never requires a hosted SaaS backend.
+**JobsHunt** is a **local** web app for organizing a job search around your own résumé materials and LLM providers. A **FastAPI** server and **React** UI run on your computer. You add API credentials and model choices in config; the app never requires a hosted SaaS backend.
 
 Typical flow: set a **résumé vault** (directory or one file), capture a posting (**URL** or paste), then use the UI to **draft**, **evaluate**, **refine**, track applications in a **pipeline**, and **export** artifacts. Data stays under paths you control (YAML + JSON on disk).
 
@@ -31,7 +31,7 @@ Outputs are **suggestions**. Review every draft and evaluation before you apply 
 
 ## LLM setup in this app
 
-Configure **saved profiles** and **agent routing** in the UI (`/settings/ai`). The JobShunt agent uses a **primary** profile and optional **fallbacks**. Features such as draft, evaluation, vault-summary merge, refine, insights, copilot, and negotiate all call your provider through the same local stack; no third-party “app cloud” is required beyond the APIs you choose.
+Configure **saved profiles** and **agent routing** in the UI (`/settings/ai`). The JobsHunt agent uses a **primary** profile and optional **fallbacks**. Features such as draft, evaluation, vault-summary merge, refine, insights, copilot, and negotiate all call your provider through the same local stack; no third-party “app cloud” is required beyond the APIs you choose.
 
 ---
 
@@ -74,7 +74,7 @@ Early runs can be vague if the vault or preferences are thin. Add solid résumé
 5. [Maturity](#maturity)
 6. [Requirements](#requirements)
 7. [Install prerequisites (macOS, Linux, Windows)](#install-prerequisites-macos-linux-windows)
-8. [Install JobShunt](#install-jobshunt)
+8. [Install JobsHunt](#install-jobshunt)
 9. [Build the web UI](#build-the-web-ui)
 10. [Configuration](#configuration)
 11. [Run](#run)
@@ -143,7 +143,7 @@ Early runs can be vague if the vault or preferences are thin. Add solid résumé
 
 ---
 
-## Install JobShunt
+## Install JobsHunt
 
 From the **repository root** (the folder that contains `pyproject.toml`):
 
@@ -217,8 +217,8 @@ If you do not yet have a lockfile workflow, `npm install` instead of `npm ci` is
 
 | | macOS / Linux (default) | Windows (default) |
 |--|-------------------------|-------------------|
-| **Config** | `$XDG_CONFIG_HOME/jobshunt/config.yaml` (often `~/.config/jobshunt/config.yaml`) | `%APPDATA%\JobShunt\config.yaml` |
-| **Data** | `$XDG_DATA_HOME/jobshunt` (often `~/.local/share/jobshunt`) | `%LOCALAPPDATA%\JobShunt\data` |
+| **Config** | `$XDG_CONFIG_HOME/jobshunt/config.yaml` (often `~/.config/jobshunt/config.yaml`) | `%APPDATA%\JobsHunt\config.yaml` |
+| **Data** | `$XDG_DATA_HOME/jobshunt` (often `~/.local/share/jobshunt`) | `%LOCALAPPDATA%\JobsHunt\data` |
 
 **Legacy paths** (`~/.config/jobhunt`, `~/.local/share/jobhunt`, `%…%\JobHunt`, **`JOBHUNT_HOME`**) are still used automatically when the newer **`jobshunt`** locations do not exist yet, so existing installs keep working without moving files.
 
@@ -265,11 +265,11 @@ If the UI was not built, visiting the root URL shows JSON with a hint to run `cd
 
 ## First-time AI setup
 
-JobShunt calls your LLM through **saved profiles** (not the raw “form only”):
+JobsHunt calls your LLM through **saved profiles** (not the raw “form only”):
 
 1. Open **AI settings** in the UI (`/settings/ai`).
 2. Enter provider, **Base URL**, **Model**, optional API key, then **save** a row under **My models (saved)**.
-3. Under **JobShunt model**, choose **Primary** (and optional **Fallbacks**), then click **Save agent routing**.
+3. Under **JobsHunt model**, choose **Primary** (and optional **Fallbacks**), then click **Save agent routing**.
 
 Supported provider styles include OpenAI, Anthropic, Ollama, OpenAI-compatible proxies, and OpenRouter; path modes (`/v1/chat/completions`, responses-style paths, etc.) are configurable in the same screen.
 
@@ -277,7 +277,7 @@ Supported provider styles include OpenAI, Anthropic, Ollama, OpenAI-compatible p
 
 ## Feature reference (detailed)
 
-Below is what the **JobShunt** UI and API support at a high level. All REST routes are under **`/api/agents/jobshunt/`** unless noted.
+Below is what the **JobsHunt** UI and API support at a high level. All REST routes are under **`/api/agents/jobshunt/`** unless noted.
 
 ### Résumé vault
 
@@ -303,7 +303,7 @@ Paths default under **`data/jobshunt/`**; **`vault_summary_path`** can override 
 - **Insights** — Heuristic ATS-oriented signals plus optional LLM commentary (skills, gaps, tips). Job paste text is scrubbed of common **bracketed-paste** terminal noise before use.
 - **Refine for ATS** — `POST /api/agents/jobshunt/refine-resume` runs up to several **heuristic → LLM full-résumé revise** rounds to clear non-good signals (line length, section headers, ASCII noise, etc.). Optional **`jobshunt.auto_refine_after_draft`** runs this automatically after each draft (extra LLM cost).
 - **Apply insight items** — `POST /api/agents/jobshunt/apply-insight-items` merges selected **gaps / quick wins** into the current draft (one target section or per-item placement).
-- **JobShunt copilot** — `POST /api/agents/jobshunt/chat` with `workspace_id`: workspace-aware assistant that returns **assistant_markdown** plus optional **client_actions** (`set_resume_text`, `set_job_paste`, `navigate_tab`) and can execute **refine** / **apply** on the server when the model emits the corresponding actions.
+- **JobsHunt copilot** — `POST /api/agents/jobshunt/chat` with `workspace_id`: workspace-aware assistant that returns **assistant_markdown** plus optional **client_actions** (`set_resume_text`, `set_job_paste`, `navigate_tab`) and can execute **refine** / **apply** on the server when the model emits the corresponding actions.
 - **Evaluation** — **Structured** evaluation: dimensions, scores, role summary, match narrative, gaps, interview prep hints, story candidates, and a recommendation bucket — returned as structured JSON the UI renders.
 
 ### Application pipeline
@@ -341,7 +341,7 @@ Paths default under **`data/jobshunt/`**; **`vault_summary_path`** can override 
 ### AI settings (global)
 
 - **GET/PUT `/api/settings/ai`** — LLM profiles, API keys (stored locally in YAML), headers, temperature, token limits, OpenAI path vs gateway URL modes.
-- **Per–JobShunt routing** — Primary/fallback profile IDs for the **`jobshunt`** agent only.
+- **Per–JobsHunt routing** — Primary/fallback profile IDs for the **`jobshunt`** agent only.
 
 ### Health
 
@@ -396,7 +396,7 @@ If this folder is not yet a Git repo, from the project root:
 ```bash
 git init
 git add -A
-git commit -m "Initial commit: JobShunt local app"
+git commit -m "Initial commit: JobsHunt local app"
 ```
 
 `.gitignore` excludes virtualenvs, `node_modules`, local `config.yaml`, and generated `*.egg-info/` — only commit **`config.example.yaml`**, not secrets.
