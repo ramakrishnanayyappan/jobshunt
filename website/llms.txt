@@ -1,0 +1,5 @@
+# JobsHunt
+
+JobsHunt is a local-first, open source job search assistant (FastAPI + React). Résumé vault, drafting, evaluation, pipeline—your machine, your keys.
+
+Repository: https://github.com/ramakrishnanayyappan/jobshunt

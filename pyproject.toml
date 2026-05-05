@@ -26,6 +26,7 @@ dependencies = [
 dev = ["pytest>=8.0.0", "ruff>=0.8.0"]
 export = ["reportlab>=4.0.0", "python-docx>=1.0.0", "pypdf>=4.0.0"]
 scout = ["playwright>=1.40.0"]
+pack = ["pyinstaller>=6.0"]
 
 [project.scripts]
 jobshunt = "jobshunt.cli:main"
@@ -35,3 +36,6 @@ package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+jobshunt = ["static/**/*"]

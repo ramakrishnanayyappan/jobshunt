@@ -1,0 +1,103 @@
+# Build macOS DMG + Windows Inno installer and attach to the GitHub Release for the pushed tag.
+# Tag format: v1.2.3 (matches on: v*)
+name: Release desktop installers
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Build React UI
+        run: |
+          cd ui
+          npm ci
+          npm run build
+
+      - name: Install Python deps and PyInstaller
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install -e ".[dev,export]"
+
+      - name: PyInstaller (macOS .app)
+        working-directory: packaging/pyinstaller
+        run: pyinstaller jobshunt.spec
+
+      - name: Create DMG
+        run: |
+          test -d packaging/pyinstaller/dist/JobsHunt.app
+          hdiutil create -volname JobsHunt \
+            -srcfolder packaging/pyinstaller/dist/JobsHunt.app \
+            -ov -format UDZO JobsHunt-mac.dmg
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: JobsHunt-mac.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Build React UI
+        run: |
+          cd ui
+          npm ci
+          npm run build
+
+      - name: Install Python deps and PyInstaller
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install -e ".[dev,export]"
+
+      - name: PyInstaller (Windows)
+        working-directory: packaging\pyinstaller
+        run: pyinstaller jobshunt.spec
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" packaging\windows\JobsHunt.iss
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: packaging\windows\JobsHunt-Setup.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

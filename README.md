@@ -75,17 +75,18 @@ Early runs can be vague if the vault or preferences are thin. Add solid résumé
 6. [Requirements](#requirements)
 7. [Install prerequisites (macOS, Linux, Windows)](#install-prerequisites-macos-linux-windows)
 8. [Install JobsHunt](#install-jobshunt)
-9. [Build the web UI](#build-the-web-ui)
-10. [Configuration](#configuration)
-11. [Run](#run)
-12. [First-time AI setup](#first-time-ai-setup)
-13. [Feature reference (detailed)](#feature-reference-detailed)
-14. [CLI reference](#cli-reference)
-15. [Development](#development)
-16. [Architecture](#architecture)
-17. [Troubleshooting](#troubleshooting)
-18. [Git repository](#git-repository)
-19. [License](#license)
+9. [GitHub Releases (desktop installers)](#github-releases-desktop-installers)
+10. [Build the web UI](#build-the-web-ui)
+11. [Configuration](#configuration)
+12. [Run](#run)
+13. [First-time AI setup](#first-time-ai-setup)
+14. [Feature reference (detailed)](#feature-reference-detailed)
+15. [CLI reference](#cli-reference)
+16. [Development](#development)
+17. [Architecture](#architecture)
+18. [Troubleshooting](#troubleshooting)
+19. [Git repository](#git-repository)
+20. [License](#license)
 
 ---
 
@@ -147,7 +148,57 @@ Early runs can be vague if the vault or preferences are thin. Add solid résumé
 
 From the **repository root** (the folder that contains `pyproject.toml`):
 
-### Create a virtual environment (recommended)
+### GitHub Releases (desktop installers)
+
+Pre-built desktop installers are published on [GitHub Releases](https://github.com/ramakrishnanayyappan/jobshunt/releases). The marketing site and stable download links expect these **exact** filenames (attach them to each release, or CI will not match `.../releases/latest/download/...`):
+
+| Asset | Description |
+|-------|-------------|
+| **JobsHunt-mac.dmg** | macOS disk image (e.g. `hdiutil create` over `packaging/pyinstaller/dist/JobsHunt.app` after `pyinstaller jobshunt.spec`). |
+| **JobsHunt-Setup.exe** | Windows installer produced by Inno Setup from `packaging/windows/JobsHunt.iss` (`OutputBaseFilename=JobsHunt-Setup`). |
+
+If you ship a different layout temporarily (for example a `.zip` of the `.app`), rename consistently and update `website/index.html` to match.
+
+App and installer icons are generated from `packaging/icons/jobs-hunt-app.png` (**copy from** `website/assets/JobsHunt_Favicon.png` when the mark changes); run `packaging/icons/build_icons.sh` (macOS; requires **ImageMagick** for multi-resolution `.ico`) to refresh `JobsHunt.icns` / `JobsHunt.ico`.
+
+### One-command install (recommended)
+
+The installer **detects your OS** (Windows, macOS, or Linux), creates a **`.venv`**, installs **`[dev,export]`** with pip, **builds the React UI only when** `src/jobshunt/static/ui/` is missing or you pass **`--rebuild-ui`**, then **starts `jobshunt serve` by default**. Missing **Python 3.9+** (and **Node 18+** when a UI build is required) can be installed automatically via **winget**, **Homebrew**, or **apt/dnf** where available; on errors it prints fix steps and lets you **press Enter to retry** (or use **`--non-interactive`** / env **`JOBSHUNT_INSTALL_NONINTERACTIVE=1`** for CI).
+
+**Install and start the app** (default — runs the server when install finishes):
+
+**macOS / Linux**
+
+```bash
+./scripts/install.sh
+# or: python3 install.py
+```
+
+**Windows (PowerShell, from repo root)**
+
+```powershell
+.\scripts\install.ps1
+# or: py -3 install.py
+```
+
+**Relaunch only** (after you close the browser or stop the server — skips pip/npm):
+
+```bash
+python3 install.py --serve-only
+# Windows: py -3 install.py --serve-only
+```
+
+**Install without starting the server** (e.g. CI or scripting):
+
+```bash
+python3 install.py --install-only
+```
+
+Pass flags through to **`jobshunt serve`** after **`--`**, e.g. `python3 install.py -- --port 8766`. If that port is busy, **`jobshunt serve`** picks another free port and prints which one it chose.
+
+Options: `install.py --rebuild-ui`, `install.py --extras dev,export` (default), `install.py --venv .venv`.
+
+### Advanced (manual steps)
 
 **macOS / Linux**
 
@@ -198,6 +249,8 @@ Use this only if you want the **portal scout** feature (browser automation). Res
 
 The FastAPI app serves the UI from **`src/jobshunt/static/ui/`** after a production build.
 
+From the repo root you can rebuild via **`python3 install.py --rebuild-ui`** (or **`py -3 install.py --rebuild-ui`** on Windows) instead of the manual `npm` steps below.
+
 ```bash
 cd ui
 npm ci
@@ -206,6 +259,8 @@ cd ..
 ```
 
 If you do not yet have a lockfile workflow, `npm install` instead of `npm ci` is fine.
+
+**Released wheels** include the built UI under `jobshunt/static/ui/` (see **`python -m build`** after an `ui` build, and CI workflow **`.github/workflows/build-wheel.yml`**).
 
 **UI development** (optional): from `ui/`, `npm run dev` starts Vite with a proxy to `http://127.0.0.1:8765` — run **`jobshunt serve`** in another terminal so `/api` requests work.
 
@@ -257,9 +312,34 @@ Never commit **`config.yaml`** if it contains API keys or personal paths (this r
 jobshunt serve
 ```
 
-By default the CLI opens a browser to the UI at `http://127.0.0.1:8765/agents/jobshunt` when using default host and port (your values may differ).
+By default the CLI opens a browser to the UI at `http://127.0.0.1:8765/agents/jobshunt` when using default host and port (your values may differ). If **8765 (or your configured port) is already in use**, the server **starts on another free port** instead and prints which port it picked—use that URL if the first one does not load.
+
+If you stopped the server or closed the terminal, start it again with **`python3 install.py --serve-only`** (from the repo root, with your venv already created) or activate `.venv` and run **`jobshunt serve`**.
 
 If the UI was not built, visiting the root URL shows JSON with a hint to run `cd ui && npm install && npm run build`.
+
+---
+
+## Desktop application (Applications / Program Files)
+
+You can ship **JobsHunt** as a normal desktop app so users relaunch it from **macOS Finder → Applications** or **Windows Start Menu / Program Files** (no terminal).
+
+Maintainers build a frozen bundle with **PyInstaller**, then:
+
+- **macOS:** Drag **`JobsHunt.app`** from `packaging/pyinstaller/dist/` into **`/Applications`** (or distribute a `.dmg` of that app). Data and config still use the usual `~/Library` / `~/.config` locations (or `%APPDATA%` on Windows).
+- **Windows:** After running PyInstaller, open **`packaging/windows/JobsHunt.iss`** in [Inno Setup](https://jrsoftware.org/isinfo.php) and **Compile** to produce an installer that installs under **Program Files** and adds a **Start Menu** shortcut.
+
+Quick path from repo root:
+
+```bash
+./packaging/build_desktop.sh
+```
+
+Or manually: build the UI (`cd ui && npm ci && npm run build`), install the project with extras (`pip install -e ".[dev,export]"` from the repo root), then `cd packaging/pyinstaller && pyinstaller jobshunt.spec`.
+
+Details and prerequisites are in [`packaging/pyinstaller/jobshunt.spec`](packaging/pyinstaller/jobshunt.spec). Optional: `pip install -e ".[pack]"` installs PyInstaller per `pyproject.toml`.
+
+Code signing (macOS Gatekeeper / Windows SmartScreen) is **not** configured in-repo; for wide distribution you will need your own signing certificates.
 
 ---
 

@@ -1,0 +1,40 @@
+# Build wheel/sdist with a fresh UI bundle so published packages include static/ui.
+name: Build distribution
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Build React UI
+        run: |
+          cd ui
+          npm ci
+          npm run build
+
+      - name: Build wheel and sdist
+        run: |
+          python -m pip install -U pip build
+          python -m build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jobshunt-dist
+          path: dist/*

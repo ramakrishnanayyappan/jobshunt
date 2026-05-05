@@ -7,6 +7,9 @@ __pycache__/
 src/*.egg-info/
 dist/
 build/
+packaging/pyinstaller/build/
+packaging/pyinstaller/dist/
+packaging/windows/JobsHunt-Setup*.exe
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
@@ -22,6 +25,3 @@ ui/node_modules/
 
 # OS
 .DS_Store
-
-#Website
-website/

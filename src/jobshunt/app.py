@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -52,7 +53,10 @@ def static_dir() -> Optional[Path]:
     d = load_config().http.static_dir
     if d:
         return Path(d).expanduser()
-    p = Path(__file__).resolve().parent / "static" / "ui"
+    root = Path(__file__).resolve().parent
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        root = Path(sys._MEIPASS) / "jobshunt"
+    p = root / "static" / "ui"
     if p.is_dir():
         return p
     return None
