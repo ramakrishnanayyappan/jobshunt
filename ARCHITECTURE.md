@@ -36,7 +36,7 @@ flowchart LR
 | `agents/jobshunt/` | Routes under `/api/agents/jobshunt/…`: vault, tailor, pipeline, evaluation, exports, vault summary, scout, **refine-resume**, **apply-insight-items**, **chat**. |
 | `agents/jobshunt/text_sanitize.py` | Strips bracketed-paste / OSC noise from pasted job text. |
 | `agents/jobshunt/resume_refine.py` | Heuristic + LLM loop to improve ATS-oriented signals. |
-| `agents/jobshunt/insight_apply.py` | LLM merge of insight lines into the résumé draft. |
+| `agents/jobshunt/insight_apply.py` | LLM merge of insight lines into the resume draft. |
 | `agents/jobshunt/jobshunt_chat.py` | Copilot turn + JSON client_actions / server tool execution. |
 
 ## Frontend (`ui/`)

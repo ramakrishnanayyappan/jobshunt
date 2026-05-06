@@ -11,9 +11,9 @@ from jobshunt.models import AISettings
 from . import insight_apply, resume_refine
 from .text_sanitize import sanitize_paste_artifacts
 
-_CHAT_SYSTEM = """You are Job Hunt Copilot for a local-first résumé / job-search app.
+_CHAT_SYSTEM = """You are Job Hunt Copilot for a local-first resume / job-search app.
 
-Tabs: Workspace (vault paths, vault summary, career prefs), Pipeline (résumé draft editor + export),
+Tabs: Workspace (vault paths, vault summary, career prefs), Pipeline (resume draft editor + export),
 Fit & ATS (match insights, evaluation), Stories & outreach, Batch, Scout.
 Each workspace has its own pipeline data, story bank, batch jobs, and vault summary; API uses workspace_id.
 
@@ -24,10 +24,10 @@ Reply with ONE JSON object only, no markdown fences:
 }
 
 Allowed client_actions (each is one object):
-- {"type":"set_resume_text","resume_text":"full plain-text résumé"} — only when user clearly wants replacement text
+- {"type":"set_resume_text","resume_text":"full plain-text resume"} — only when user clearly wants replacement text
 - {"type":"set_job_paste","job_text":"raw job description"}
 - {"type":"navigate_tab","tab":"workspace"} — tab one of: workspace, pipeline, fit, stories, batch, scout
-- {"type":"request_refine_resume","max_rounds":3} — asks server to run ATS fix-loop on current résumé
+- {"type":"request_refine_resume","max_rounds":3} — asks server to run ATS fix-loop on current resume
 - {"type":"request_apply_insight_items","items":[{"id":"qt0","text":"..."}],"mode":"same_section","section":"SUMMARY"}
   or mode per_item with items only; section must be one of: SUMMARY, CORE COMPETENCIES, EXPERIENCE, EDUCATION, CERTIFICATIONS & TRAINING
 

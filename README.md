@@ -2,9 +2,9 @@
 
 ## Overview
 
-**JobsHunt** is a **local** web app for organizing a job search around your own résumé materials and LLM providers. A **FastAPI** server and **React** UI run on your computer. You add API credentials and model choices in config; the app never requires a hosted SaaS backend.
+**JobsHunt** is a **local** web app for organizing a job search around your own resume materials and LLM providers. A **FastAPI** server and **React** UI run on your computer. You add API credentials and model choices in config; the app never requires a hosted SaaS backend.
 
-Typical flow: set a **résumé vault** (directory or one file), capture a posting (**URL** or paste), then use the UI to **draft**, **evaluate**, **refine**, track applications in a **pipeline**, and **export** artifacts. Data stays under paths you control (YAML + JSON on disk).
+Typical flow: set a **resume vault** (directory or one file), capture a posting (**URL** or paste), then use the UI to **draft**, **evaluate**, **refine**, track applications in a **pipeline**, and **export** artifacts. Data stays under paths you control (YAML + JSON on disk).
 
 ### Capabilities
 
@@ -37,7 +37,7 @@ Configure **saved profiles** and **agent routing** in the UI (`/settings/ai`). T
 
 ## Getting useful results
 
-Early runs can be vague if the vault or preferences are thin. Add solid résumé text, **preferences** / **archetype hints**, maintain an optional **vault summary**, and pin **stories** as you go. Large language models can still be wrong about facts — **check** employers, titles, and requirements yourself.
+Early runs can be vague if the vault or preferences are thin. Add solid resume text, **preferences** / **archetype hints**, maintain an optional **vault summary**, and pin **stories** as you go. Large language models can still be wrong about facts — **check** employers, titles, and requirements yourself.
 
 ---
 
@@ -45,7 +45,7 @@ Early runs can be vague if the vault or preferences are thin. Add solid résumé
 
 | Area | Status | Notes |
 |------|--------|--------|
-| Vault (folder/file, limits, macOS pickers) | **Stable** | PDF/DOCX inputs need `export` extra. Native pickers **macOS only**; elsewhere edit paths or YAML. |
+| Vault (folder/file, limits, native pickers) | **Stable** | PDF/DOCX inputs need `export` extra. Native pickers on **macOS and Windows**; on Linux edit paths or YAML. |
 | Vault summary | **Stable** | Optional; can block draft when manifest is stale. |
 | Draft / compose | **Stable** | Vault or summary + job spec. |
 | Insights + apply insight items | **Stable** | Sanitizes common paste noise from terminals. |
@@ -226,7 +226,7 @@ python -m pip install --upgrade pip
 
 ### Install the package
 
-**Core + dev tests + résumé export libraries** (recommended):
+**Core + dev tests + resume export libraries** (recommended):
 
 ```bash
 pip install -e ".[dev,export]"
@@ -298,7 +298,7 @@ $env:JOBSHUNT_HOME = "C:\Users\You\jobshunt-data"
 
 2. Copy **`config.example.yaml`** to that path (same filename **`config.yaml`**), then edit:
 
-   - **`jobshunt.resume_vault_path`** — folder of résumés or one résumé file (`.txt`, `.md`, `.docx`, `.pdf` with optional deps).
+   - **`jobshunt.resume_vault_path`** — folder of resumes or one resume file (`.txt`, `.md`, `.docx`, `.pdf` with optional deps).
    - **`jobshunt.output_path`** — optional explicit folder for exports; if empty, exports go under the app data tree (`…/jobshunt/exports` or the legacy `…/job_hunt/exports` if you still use an older data directory).
    - **`http.host` / `http.port`** — bind address (default `127.0.0.1:8765`).
 
@@ -359,12 +359,12 @@ Supported provider styles include OpenAI, Anthropic, Ollama, OpenAI-compatible p
 
 Below is what the **JobsHunt** UI and API support at a high level. All REST routes are under **`/api/agents/jobshunt/`** unless noted.
 
-### Résumé vault
+### Resume vault
 
-- **Folder or single file**: Config **`resume_vault_path`** can point to a directory (multiple résumés) or one file.
+- **Folder or single file**: Config **`resume_vault_path`** can point to a directory (multiple resumes) or one file.
 - **Formats**: Plain text / Markdown always; **PDF** and **DOCX** need `pip install -e ".[export]"` (and libraries noted in error messages if missing).
 - **Limits**: **`max_vault_chars`** and **`max_vault_files`** avoid sending huge vaults to the model (see `config.example.yaml`).
-- **Native folder/file pickers** are available **only on macOS** (`pick-vault-folder`, `pick-vault-file`, `pick-output-folder`). On Windows and Linux, type paths in settings or edit `config.yaml`.
+- **Native folder/file pickers** work on **macOS and Windows** (`pick-vault-folder`, `pick-vault-file`, `pick-output-folder`). On Linux, type paths in settings or edit `config.yaml`.
 
 ### Vault summary (optional “master summary”)
 
@@ -379,9 +379,9 @@ Paths default under **`data/jobshunt/`**; **`vault_summary_path`** can override 
 ### Workspace: job input, draft, insights, evaluation
 
 - **Job URL or pasted posting** — Fetched or pasted content is normalized into a **job spec** for downstream steps.
-- **Draft / compose** — Generates tailored résumé text using vault (or vault summary) + job context.
+- **Draft / compose** — Generates tailored resume text using vault (or vault summary) + job context.
 - **Insights** — Heuristic ATS-oriented signals plus optional LLM commentary (skills, gaps, tips). Job paste text is scrubbed of common **bracketed-paste** terminal noise before use.
-- **Refine for ATS** — `POST /api/agents/jobshunt/refine-resume` runs up to several **heuristic → LLM full-résumé revise** rounds to clear non-good signals (line length, section headers, ASCII noise, etc.). Optional **`jobshunt.auto_refine_after_draft`** runs this automatically after each draft (extra LLM cost).
+- **Refine for ATS** — `POST /api/agents/jobshunt/refine-resume` runs up to several **heuristic → LLM full-resume revise** rounds to clear non-good signals (line length, section headers, ASCII noise, etc.). Optional **`jobshunt.auto_refine_after_draft`** runs this automatically after each draft (extra LLM cost).
 - **Apply insight items** — `POST /api/agents/jobshunt/apply-insight-items` merges selected **gaps / quick wins** into the current draft (one target section or per-item placement).
 - **JobsHunt copilot** — `POST /api/agents/jobshunt/chat` with `workspace_id`: workspace-aware assistant that returns **assistant_markdown** plus optional **client_actions** (`set_resume_text`, `set_job_paste`, `navigate_tab`) and can execute **refine** / **apply** on the server when the model emits the corresponding actions.
 - **Evaluation** — **Structured** evaluation: dimensions, scores, role summary, match narrative, gaps, interview prep hints, story candidates, and a recommendation bucket — returned as structured JSON the UI renders.

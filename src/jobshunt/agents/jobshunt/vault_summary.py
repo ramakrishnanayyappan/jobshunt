@@ -1,4 +1,4 @@
-"""Master résumé vault summary + manifest of incorporated files (reduces LLM context size)."""
+"""Master resume vault summary + manifest of incorporated files (reduces LLM context size)."""
 from __future__ import annotations
 
 import hashlib
@@ -20,7 +20,7 @@ MERGE_MAX_OUT_TOKENS = 6000
 
 _MERGE_SYSTEM = """You maintain a single plain-text "master career summary" for a candidate.
 
-The user will give you the CURRENT summary (may be empty) plus text extracted from ONE résumé file.
+The user will give you the CURRENT summary (may be empty) plus text extracted from ONE resume file.
 
 Task: Merge the new material into the summary. Rules:
 - Plain text only, no markdown fences.
@@ -30,7 +30,7 @@ Task: Merge the new material into the summary. Rules:
 - Total output must stay under 40000 characters; summarize if needed.
 - Do not invent employers, degrees, or credentials not present in the inputs."""
 
-_REBUILD_SYSTEM = """You produce ONE plain-text master career summary from raw résumé material that may include multiple files.
+_REBUILD_SYSTEM = """You produce ONE plain-text master career summary from raw resume material that may include multiple files.
 
 Rules:
 - Plain text only, no markdown fences.
@@ -369,7 +369,7 @@ def rebuild_from_vault(
     except ImportError:
         raise
     if not bundle.strip():
-        raise ValueError("No readable résumé text in the vault.")
+        raise ValueError("No readable resume text in the vault.")
     text = _llm_rebuild(bundle)
     sp = summary_file_path(cfg, workspace_id)
     _write_summary(sp, text)
@@ -436,7 +436,7 @@ def vault_text_for_tailor(
                 names = ", ".join(p["display_name"] for p in pend[:10])
                 more = f" (+{len(pend) - 10} more)" if len(pend) > 10 else ""
                 raise ValueError(
-                    "Vault summary is stale: new or changed résumé(s) not merged: "
+                    "Vault summary is stale: new or changed resume(s) not merged: "
                     f"{names}{more}. Update the vault summary in Job hunt, or disable blocking in settings."
                 )
         used = incorporated_paths(cfg, workspace_id)

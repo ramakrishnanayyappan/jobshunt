@@ -1,4 +1,4 @@
-"""Apply structured insight items (quick tips, etc.) into a résumé draft via LLM."""
+"""Apply structured insight items (quick tips, etc.) into a resume draft via LLM."""
 from __future__ import annotations
 
 import json
@@ -20,11 +20,11 @@ ALLOWED_SECTIONS = [
 
 Mode = Literal["same_section", "per_item"]
 
-_APPLY_SYSTEM = """You revise a plain-text résumé by incorporating the user's selected suggestions.
+_APPLY_SYSTEM = """You revise a plain-text resume by incorporating the user's selected suggestions.
 
 Output rules:
-- Reply with ONE JSON object only, no markdown. Keys: "resume_text" (string, full résumé body).
-- The résumé must stay plain text: same global layout as typical ATS drafts (name line, contact, blank line,
+- Reply with ONE JSON object only, no markdown. Keys: "resume_text" (string, full resume body).
+- The resume must stay plain text: same global layout as typical ATS drafts (name line, contact, blank line,
   then ALL-CAPS section headers one per line: SUMMARY, CORE COMPETENCIES, EXPERIENCE, EDUCATION,
   CERTIFICATIONS & TRAINING as applicable).
 - Do not invent employers, titles, dates, degrees, or metrics. Only merge truthful wording.
@@ -73,7 +73,7 @@ def _llm_apply(
 ) -> str:
     user = (
         f"JOB POSTING (context):\n{(job_spec or '')[:12000]}\n\n"
-        f"CURRENT RÉSUMÉ:\n{(resume_text or '')[:12000]}\n\n"
+        f"CURRENT RESUME:\n{(resume_text or '')[:12000]}\n\n"
         f"TASK:\n{payload_desc}\n"
     )
 

@@ -24,10 +24,10 @@ _STOP = frozenset(
     .split()
 )
 
-_LLM_SYSTEM = """You analyze a job posting and a finished résumé draft. Reply with ONE JSON object only, no markdown.
+_LLM_SYSTEM = """You analyze a job posting and a finished resume draft. Reply with ONE JSON object only, no markdown.
 Keys (use exactly):
 - "technical_skills": array of 8–15 distinct technical skills/tools/platforms inferred mainly from the JOB posting (strings).
-- "highlights": array of exactly 4 short strings: why this résumé fits the role (concrete, no fluff).
+- "highlights": array of exactly 4 short strings: why this resume fits the role (concrete, no fluff).
 - "gaps": array of 2–5 items; each item may be a string OR an object with "id" (short string) and "text" (the gap line).
 - "quick_tips": array of 3–5 items; each may be a string OR an object with "id" and "text" (concise ATS edit).
 Keep text under 140 characters per line. Valid JSON only."""
@@ -208,7 +208,7 @@ def heuristic_ats(job_spec: str, resume_text: str) -> Dict[str, Any]:
     score += int(round(overlap * 0.22))
     if overlap >= 55:
         st = "good"
-        det = f"~{matched} job keywords echoed in the résumé (estimated {overlap}% overlap)."
+        det = f"~{matched} job keywords echoed in the resume (estimated {overlap}% overlap)."
     elif overlap >= 35:
         st = "warn"
         det = "Moderate keyword overlap; weave a few more posting terms where truthful."
@@ -312,7 +312,7 @@ def llm_insights(job_spec: str, resume_text: str) -> Optional[Dict[str, Any]]:
     user = (
         "JOB POSTING / SPEC:\n"
         f"{(job_spec or '')[:14000]}\n\n"
-        "RÉSUMÉ DRAFT:\n"
+        "RESUME DRAFT:\n"
         f"{(resume_text or '')[:12000]}\n"
     )
     try:

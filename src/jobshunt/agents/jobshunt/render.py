@@ -30,7 +30,7 @@ def _normalize_header(line: str) -> Optional[str]:
 def parse_txt_content(text: str) -> Tuple[str, str, List[Tuple[str, List[str]]]]:
     lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
     if len(lines) < 4:
-        raise ValueError("Résumé text too short: need name, contact, blank line, and sections.")
+        raise ValueError("Resume text too short: need name, contact, blank line, and sections.")
     name = lines[0].strip()
     contact = lines[1].strip()
     idx = 2
@@ -205,9 +205,9 @@ def _build_pdf_impl(name: str, contact: str, sections: List[Tuple[str, List[str]
         rightMargin=0.65 * inch,
         topMargin=0.55 * inch,
         bottomMargin=0.55 * inch,
-        title=f"{name} Résumé",
+        title=f"{name} Resume",
         author=name,
-        subject="Résumé",
+        subject="Resume",
     )
     doc.build(story)
 

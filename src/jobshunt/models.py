@@ -59,7 +59,7 @@ class HttpSettings(BaseModel):
 
 
 class JobShuntSettings(BaseModel):
-    """Résumé vault + output paths."""
+    """Resume vault + output paths."""
 
     resume_vault_path: str = "~/Documents/resumes"
     output_path: str = ""

@@ -1,4 +1,4 @@
-"""Iterative heuristic + LLM passes to improve plain-text résumé ATS heuristics."""
+"""Iterative heuristic + LLM passes to improve plain-text resume ATS heuristics."""
 from __future__ import annotations
 
 from typing import Any, Dict, List
@@ -12,9 +12,9 @@ from .text_sanitize import sanitize_paste_artifacts
 
 _REFINE_EXTRA = """
 
-Your task now is to REVISE the existing résumé below to fix ATS/heuristic issues listed.
+Your task now is to REVISE the existing resume below to fix ATS/heuristic issues listed.
 Rules:
-- Output ONLY the full revised résumé as plain UTF-8 text (same structure rules as above).
+- Output ONLY the full revised resume as plain UTF-8 text (same structure rules as above).
 - Do NOT add markdown or code fences.
 - Preserve factual content: do not invent employers, titles, degrees, dates, or metrics.
 - You MAY: rewrap long lines (target under 120 chars where reasonable), replace smart quotes with ASCII quotes,
@@ -27,9 +27,9 @@ Rules:
 def _llm_refine_once(job_spec: str, resume_text: str, issues_block: str, *, max_out_tokens: int = 6000) -> str:
     user = (
         f"JOB POSTING (for keyword alignment only):\n{(job_spec or '')[:14000]}\n\n"
-        f"CURRENT RÉSUMÉ:\n{(resume_text or '')[:14000]}\n\n"
+        f"CURRENT RESUME:\n{(resume_text or '')[:14000]}\n\n"
         f"ISSUES TO ADDRESS:\n{issues_block}\n\n"
-        "Output the complete revised résumé only."
+        "Output the complete revised resume only."
     )
 
     def _once(a: AISettings) -> str:

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jobshunt"
 version = "0.1.0"
-description = "Local JobShunt assistant: résumé vault, tailored drafts, pipeline (UI + FastAPI)"
+description = "Local JobShunt assistant: resume vault, tailored drafts, pipeline (UI + FastAPI)"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }

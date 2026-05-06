@@ -18,7 +18,7 @@ Required keys (exactly):
 - "dimensions": array of objects, each with "id" (short snake_case), "label" (human string), "score" (1-5 int), "rationale" (one sentence).
   Cover at least these themes across the array: role_fit, level_seniority, impact_scope, comp_awareness, culture_process, growth_risk.
 - "role_summary": string — 2-4 sentences: what the role is and who they want.
-- "cv_match": string — how the vault/résumé material aligns; be grounded in provided text only.
+- "cv_match": string — how the vault/resume material aligns; be grounded in provided text only.
 - "gaps": array of 3-8 strings — concrete gaps or risks (skills, level, domain).
 - "level_strategy": string — e.g. stretch role vs comfortable; how to position in interviews.
 - "comp_notes": string — brief compensation / market realism notes; MUST say estimates may be wrong and user should verify.
@@ -210,9 +210,9 @@ def build_evaluation(
     resume = (resume_text or "")[:16_000]
     extra = _hint_block(cfg)
     user = (
-        f"{extra}\n\n--- JOB POSTING ---\n{spec}\n\n--- RÉSUMÉ DRAFT (vault-based) ---\n{resume}\n"
+        f"{extra}\n\n--- JOB POSTING ---\n{spec}\n\n--- RESUME DRAFT (vault-based) ---\n{resume}\n"
         if extra
-        else f"--- JOB POSTING ---\n{spec}\n\n--- RÉSUMÉ DRAFT (vault-based) ---\n{resume}\n"
+        else f"--- JOB POSTING ---\n{spec}\n\n--- RESUME DRAFT (vault-based) ---\n{resume}\n"
     )
     try:
         raw = _llm_eval(_EVAL_SYSTEM, user, max_out_tokens=max_out_tokens)

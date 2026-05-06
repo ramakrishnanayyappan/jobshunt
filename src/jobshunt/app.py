@@ -44,7 +44,7 @@ def list_agents() -> List[Dict[str, Any]]:
         {
             "id": "jobshunt",
             "name": "JobShunt",
-            "description": "Tailor résumés from your vault to a job URL or pasted posting",
+            "description": "Tailor resumes from your vault to a job URL or pasted posting",
         },
     ]
 

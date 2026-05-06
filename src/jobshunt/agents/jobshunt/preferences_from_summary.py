@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Tuple
 from jobshunt.ai.client import chat_text_impl, run_with_llm_fallback
 from jobshunt.models import AISettings
 
-_SYSTEM = """You analyze a plain-text career / résumé summary for one candidate.
+_SYSTEM = """You analyze a plain-text career / resume summary for one candidate.
 
 Return ONE JSON object only, no markdown fences, with exactly these keys:
 - "user_preferences": array of short strings (one distinct preference per item), e.g. remote-first, no defense sector, staff-level IC, west coast, max 50% travel, etc. Only items grounded in or clearly implied by the summary; if unclear, suggest 3–8 reasonable job-search preference lines a person with this profile might state. Max 20 items.

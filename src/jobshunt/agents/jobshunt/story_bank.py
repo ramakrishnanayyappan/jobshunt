@@ -88,7 +88,7 @@ def unpin_story(workspace_id: str, story_id: str) -> bool:
 
 
 def format_for_tailor(workspace_id: str, max_chars: int = 4000) -> str:
-    """Compact block to inject into résumé tailoring user message."""
+    """Compact block to inject into resume tailoring user message."""
     rows = list_pinned(workspace_id)[:12]
     if not rows:
         return ""

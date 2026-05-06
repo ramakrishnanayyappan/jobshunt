@@ -310,7 +310,7 @@ function InsightsDashboard({
                     <button
                       type="button"
                       className="btn btn-sm btn-outline-success shrink-0"
-                      title="Add to résumé via LLM"
+                      title="Add to resume via LLM"
                       disabled={busy}
                       onClick={() => onQueueApplyItems([item])}
                     >
@@ -341,7 +341,7 @@ function InsightsDashboard({
                     <button
                       type="button"
                       className="btn btn-sm btn-outline-success shrink-0"
-                      title="Add to résumé via LLM"
+                      title="Add to resume via LLM"
                       disabled={busy}
                       onClick={() => onQueueApplyItems([item])}
                     >
@@ -672,7 +672,7 @@ export default function JobHunt() {
   async function runRefineAts() {
     const spec = jobSpecUsed.trim() || preview || jobPaste.trim() || '';
     if (!resumeText.trim()) {
-      setErr('Need résumé text to refine.');
+      setErr('Need resume text to refine.');
       return;
     }
     setErr(null);
@@ -1289,8 +1289,8 @@ export default function JobHunt() {
 
   const vaultHint = () => {
     if (!st) return '';
-    if (st.vault_kind === 'file') return 'Using a single résumé file.';
-    if (st.vault_kind === 'folder') return `Folder: scanning ${st.vault_source_count ?? 0} résumé file(s).`;
+    if (st.vault_kind === 'file') return 'Using a single resume file.';
+    if (st.vault_kind === 'folder') return `Folder: scanning ${st.vault_source_count ?? 0} resume file(s).`;
     return 'Path missing or not a supported file/folder.';
   };
 
@@ -1346,7 +1346,7 @@ export default function JobHunt() {
               checked={chatAutoApply}
               onChange={(e) => setChatAutoApply(e.target.checked)}
             />
-            Auto-apply résumé text from copilot
+            Auto-apply resume text from copilot
           </label>
         ) : null}
       </div>
@@ -1360,7 +1360,7 @@ export default function JobHunt() {
         <div className="portico-card-body">
           <p className="small text-secondary mb-3">
             Each workspace keeps its own <strong>pipeline</strong>, <strong>Fit &amp; ATS</strong> state, story bank,
-            batch jobs, and <strong>vault summary</strong>. Use the same résumé vault or a different path per
+            batch jobs, and <strong>vault summary</strong>. Use the same resume vault or a different path per
             workspace — leave the vault field empty here to use the global default from config.
           </p>
           <div className="row g-2 align-items-end mb-3">
@@ -1429,7 +1429,7 @@ export default function JobHunt() {
       </div>
       {(st?.vault_summary_pending_count ?? 0) > 0 ? (
         <div className="alert alert-warning py-2 mb-3 small">
-          <strong>Vault summary:</strong> {st?.vault_summary_pending_count} résumé file(s) are new or changed since
+          <strong>Vault summary:</strong> {st?.vault_summary_pending_count} resume file(s) are new or changed since
           the last merge. Update the summary so drafts stay accurate
           {st?.use_vault_summary_for_context ? ' (required before draft when blocking is on)' : ''}.{' '}
           <button
@@ -1444,14 +1444,15 @@ export default function JobHunt() {
       ) : null}
       <div className="portico-card portico-card--lift mb-4">
         <div className="portico-card-header portico-card-header--accent">
-          <span>Résumé vault & export location</span>
+          <span>Resume vault & export location</span>
         </div>
         <div className="portico-card-body">
           <p className="small text-secondary mb-3">
-            On macOS, use Finder to pick a <strong>folder</strong> (all .txt, .md, .docx, .pdf inside are
-            scanned) or a <strong>single résumé file</strong>. Paths are saved to your JobsHunt config.
+            Use your system file picker to choose a <strong>folder</strong> (all .txt, .md, .docx, .pdf inside are
+            scanned) or a <strong>single resume file</strong>. On macOS this is Finder; on Windows, File Explorer.
+            Paths are saved to your JobsHunt config.
           </p>
-          <label className="form-label small text-white-50 mb-0">Résumé vault path (folder or file)</label>
+          <label className="form-label small text-white-50 mb-0">Resume vault path (folder or file)</label>
           <input
             className="form-control form-control-sm bg-dark text-white border-secondary mb-2"
             value={vaultInput}
@@ -1474,7 +1475,7 @@ export default function JobHunt() {
               disabled={busy !== null}
               onClick={pickVaultFile}
             >
-              Choose résumé file…
+              Choose resume file…
             </button>
           </div>
           <label className="form-label small text-white-50 mb-0">
@@ -1560,7 +1561,7 @@ export default function JobHunt() {
               onChange={(e) => saveCareerToggles(e.target.checked, !!st?.scout_enabled)}
             />
             <label className="form-check-label small text-secondary" htmlFor="storyBankToggle">
-              Inject pinned <strong>story bank</strong> into résumé draft (bounded size).
+              Inject pinned <strong>story bank</strong> into resume draft (bounded size).
             </label>
           </div>
           <div className="form-check mb-2">
@@ -1592,7 +1593,7 @@ export default function JobHunt() {
             <ul className="small text-secondary mb-0" style={{ lineHeight: 1.6 }}>
               {!(st.workspace_resume_vault_path || '').trim() ? (
                 <li className="text-white-50">
-                  Résumé vault path for this workspace is empty — using global default:{' '}
+                  Resume vault path for this workspace is empty — using global default:{' '}
                   <code className="text-light">{st.global_default_vault_path ?? '—'}</code>
                 </li>
               ) : null}
@@ -1608,7 +1609,7 @@ export default function JobHunt() {
                 {st.vault_preview_files.length ? (
                   <>Included files (sample): {st.vault_preview_files.join(', ')}</>
                 ) : (
-                  <>No matching résumé files at this path (.txt, .md, .docx, .pdf).</>
+                  <>No matching resume files at this path (.txt, .md, .docx, .pdf).</>
                 )}
               </li>
             </ul>
@@ -1625,7 +1626,7 @@ export default function JobHunt() {
         <div className="portico-card-body">
           <p className="small text-secondary mb-3">
             Build a single text summary of your vault so drafting sends <strong>less</strong> context to the model.
-            A log on disk records which files were merged. When you add or edit a résumé, update the summary before
+            A log on disk records which files were merged. When you add or edit a resume, update the summary before
             drafting (or turn off blocking below).
           </p>
           <div className="form-check mb-2">
@@ -1642,7 +1643,7 @@ export default function JobHunt() {
               }
             />
             <label className="form-check-label small text-secondary" htmlFor="vaultSummaryToggle">
-              Use vault summary for JobsHunt drafting (instead of sending all résumé files).
+              Use vault summary for JobsHunt drafting (instead of sending all resume files).
             </label>
           </div>
           <div className="form-check mb-2">
@@ -1787,7 +1788,7 @@ export default function JobHunt() {
             disabled={busy !== null}
             onClick={onDraft}
           >
-            {busy === 'draft' ? 'Drafting…' : 'Draft résumé (LLM)'}
+            {busy === 'draft' ? 'Drafting…' : 'Draft resume (LLM)'}
           </button>
         </div>
       </div>
@@ -1810,7 +1811,7 @@ export default function JobHunt() {
 
       <div className="portico-card portico-card--lift mb-4">
         <div className="portico-card-header portico-card-header--accent">
-          <span>Edit résumé</span>
+          <span>Edit resume</span>
         </div>
         <div className="portico-card-body">
           <textarea
@@ -1991,7 +1992,7 @@ export default function JobHunt() {
           {evaluation ? (
             <EvaluationPanel ev={evaluation} onPinStory={pinFromEval} busy={busy === 'pin'} />
           ) : (
-            <p className="text-secondary small">Draft a résumé with evaluation enabled, or open Workspace and draft first.</p>
+            <p className="text-secondary small">Draft a resume with evaluation enabled, or open Workspace and draft first.</p>
           )}
           {insights ? (
             <InsightsDashboard
@@ -2177,7 +2178,7 @@ export default function JobHunt() {
           <div className="portico-card-body small flex-grow-1 overflow-auto" style={{ minHeight: 180 }}>
             {chatMessages.length === 0 ? (
               <p className="text-secondary mb-0">
-                Ask about this job, résumé, or workspace. The copilot can suggest tab changes or run ATS refine when
+                Ask about this job, resume, or workspace. The copilot can suggest tab changes or run ATS refine when
                 you ask.
               </p>
             ) : (
@@ -2206,7 +2207,7 @@ export default function JobHunt() {
                   setChatPendingResume(null);
                 }}
               >
-                Apply suggested résumé to editor
+                Apply suggested resume to editor
               </button>
             </div>
           ) : null}
@@ -2242,7 +2243,7 @@ export default function JobHunt() {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content bg-dark text-white border-secondary">
               <div className="modal-header border-secondary">
-                <h5 className="modal-title">Add to résumé</h5>
+                <h5 className="modal-title">Add to resume</h5>
                 <button type="button" className="btn-close btn-close-white" onClick={() => setApplyModal(null)} />
               </div>
               <div className="modal-body small">

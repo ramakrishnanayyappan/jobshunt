@@ -4,7 +4,7 @@ from jobshunt.ai.client import chat_text_impl, run_with_llm_fallback
 from jobshunt.models import AISettings
 
 
-SYSTEM = """You are an expert résumé writer. Produce a tailored résumé as plain UTF-8 text ONLY.
+SYSTEM = """You are an expert resume writer. Produce a tailored resume as plain UTF-8 text ONLY.
 
 Strict format (no markdown, no code fences):
 - Line 1: candidate full name exactly as they use professionally.
@@ -19,7 +19,7 @@ Strict format (no markdown, no code fences):
 - Under EXPERIENCE: each role starts with a non-bullet line "Title | Company | Location | Dates".
   Achievements as bullet lines starting with • or -.
 - Under CORE COMPETENCIES: comma-separated or short lines; keep scannable.
-- Tailor wording to the job posting; do not invent employers, degrees, or credentials not supported by the source résumés.
+- Tailor wording to the job posting; do not invent employers, degrees, or credentials not supported by the source resumes.
 - If the vault material is thin, still output valid structure; you may generalize carefully.
 
 Output nothing before the name and nothing after the last section content."""
@@ -37,7 +37,7 @@ def compose_resume_text(
     extra = (story_bank_context or "").strip()
     user_parts = [
         "Job posting / spec:\n" + job_spec.strip(),
-        "Source résumé material (vault):\n" + vault_block,
+        "Source resume material (vault):\n" + vault_block,
     ]
     if extra:
         user_parts.append(extra)

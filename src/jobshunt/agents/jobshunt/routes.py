@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field
 
 from jobshunt.config import load_config, save_config
 from jobshunt.models import JobShuntSettings
+from jobshunt import win_pickers
 from . import evaluation, insights, negotiate, pipeline, scout, story_bank, workspaces as ws_mod
 from . import job_spec as job_spec_mod
 from . import batch_jobs, render, resume_vault, tailor, validate, vault_summary
@@ -39,11 +40,23 @@ def _output_base(cfg: JobShuntSettings) -> Path:
 
 
 def _path_display(path: str) -> str:
-    path = path.rstrip("/")
-    home = str(Path.home())
-    if path.startswith(home + "/") or path == home:
-        return "~" + path[len(home) :] if path != home else "~"
-    return path
+    p = Path(path).expanduser()
+    try:
+        resolved = p.resolve()
+    except OSError:
+        resolved = p
+    home = Path.home()
+    try:
+        home_r = home.resolve()
+    except OSError:
+        home_r = home
+    try:
+        rel = resolved.relative_to(home_r)
+    except ValueError:
+        return str(resolved)
+    if rel == Path("."):
+        return "~"
+    return "~/" + rel.as_posix()
 
 
 def _run_osascript(script: str) -> str:
@@ -195,59 +208,93 @@ def put_settings(
 
 @router.get("/pick-vault-folder")
 def pick_vault_folder() -> Dict[str, Any]:
-    if sys.platform != "darwin":
-        raise HTTPException(
-            501,
-            "Folder picker is only available on macOS. Set the path in config or type it in Job hunt settings.",
-        )
-    script = """
+    if sys.platform == "darwin":
+        script = """
 tell application "Finder" to activate
 delay 0.2
-return POSIX path of (choose folder with prompt "Job Hunt — résumé vault folder (all résumés inside will be used)" default location (path to home folder))
+return POSIX path of (choose folder with prompt "Job Hunt — resume vault folder (all resumes inside will be used)" default location (path to home folder))
 """
-    raw = _run_osascript(script)
-    if not raw:
-        return {"cancelled": True}
-    path = raw.rstrip().rstrip("/")
-    return {"path": path, "path_display": _path_display(path)}
+        raw = _run_osascript(script)
+        if not raw:
+            return {"cancelled": True}
+        path = raw.rstrip().rstrip("/")
+        return {"path": path, "path_display": _path_display(path)}
+    if win_pickers.supported():
+        try:
+            picked = win_pickers.pick_folder_windows(
+                "Job Hunt — resume vault folder (all resumes inside will be used)"
+            )
+        except RuntimeError as e:
+            raise HTTPException(400, str(e)) from e
+        if not picked:
+            return {"cancelled": True}
+        path = win_pickers.normalize_picked_path(picked).rstrip("/\\")
+        return {"path": path, "path_display": _path_display(path)}
+    raise HTTPException(
+        501,
+        "Folder picker is only available on macOS and Windows. Set the path in config or type it in Job hunt settings.",
+    )
 
 
 @router.get("/pick-vault-file")
 def pick_vault_file() -> Dict[str, Any]:
-    if sys.platform != "darwin":
-        raise HTTPException(
-            501,
-            "File picker is only available on macOS. Set the path in config or type the full path.",
-        )
-    script = """
+    if sys.platform == "darwin":
+        script = """
 tell application "Finder" to activate
 delay 0.2
-return POSIX path of (choose file with prompt "Job Hunt — select one résumé (.txt, .md, .docx, .pdf)" default location (path to documents folder))
+return POSIX path of (choose file with prompt "Job Hunt — select one resume (.txt, .md, .docx, .pdf)" default location (path to documents folder))
 """
-    raw = _run_osascript(script)
-    if not raw:
-        return {"cancelled": True}
-    path = raw.rstrip()
-    return {"path": path, "path_display": _path_display(path)}
+        raw = _run_osascript(script)
+        if not raw:
+            return {"cancelled": True}
+        path = raw.rstrip()
+        return {"path": path, "path_display": _path_display(path)}
+    if win_pickers.supported():
+        try:
+            picked = win_pickers.pick_open_file_windows(
+                "Job Hunt — select one resume (.txt, .md, .docx, .pdf)",
+                "Resume files|*.txt;*.md;*.docx;*.pdf|All files|*.*",
+            )
+        except RuntimeError as e:
+            raise HTTPException(400, str(e)) from e
+        if not picked:
+            return {"cancelled": True}
+        path = win_pickers.normalize_picked_path(picked)
+        return {"path": path, "path_display": _path_display(path)}
+    raise HTTPException(
+        501,
+        "File picker is only available on macOS and Windows. Set the path in config or type the full path.",
+    )
 
 
 @router.get("/pick-output-folder")
 def pick_output_folder() -> Dict[str, Any]:
-    if sys.platform != "darwin":
-        raise HTTPException(
-            501,
-            "Folder picker is only available on macOS. Type an output path in config if needed.",
-        )
-    script = """
+    if sys.platform == "darwin":
+        script = """
 tell application "Finder" to activate
 delay 0.2
 return POSIX path of (choose folder with prompt "Job Hunt — where to keep exports / run metadata hint" default location (path to home folder))
 """
-    raw = _run_osascript(script)
-    if not raw:
-        return {"cancelled": True}
-    path = raw.rstrip().rstrip("/")
-    return {"path": path, "path_display": _path_display(path)}
+        raw = _run_osascript(script)
+        if not raw:
+            return {"cancelled": True}
+        path = raw.rstrip().rstrip("/")
+        return {"path": path, "path_display": _path_display(path)}
+    if win_pickers.supported():
+        try:
+            picked = win_pickers.pick_folder_windows(
+                "Job Hunt — where to keep exports / run metadata"
+            )
+        except RuntimeError as e:
+            raise HTTPException(400, str(e)) from e
+        if not picked:
+            return {"cancelled": True}
+        path = win_pickers.normalize_picked_path(picked).rstrip("/\\")
+        return {"path": path, "path_display": _path_display(path)}
+    raise HTTPException(
+        501,
+        "Folder picker is only available on macOS and Windows. Type an output path in config if needed.",
+    )
 
 
 class CreateWorkspaceBody(BaseModel):
@@ -448,7 +495,7 @@ def execute_draft(body: DraftBody, workspace_id: str) -> Dict[str, Any]:
         vault_txt, used, vsrc = vault_summary.vault_text_for_tailor(vault, cfg, workspace_id)
     except ImportError as e:
         raise ImportError(
-            "Reading this résumé format needs optional packages: pip install 'jobshunt[export]'. "
+            "Reading this resume format needs optional packages: pip install 'jobshunt[export]'. "
             + str(e)
         ) from e
     story_ctx = ""

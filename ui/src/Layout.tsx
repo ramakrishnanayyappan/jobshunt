@@ -80,14 +80,14 @@ export default function Layout() {
           <div>
             <div className="portico-kicker">JobsHunt</div>
             <div className="portico-sidebar-title">Local assistant</div>
-            <p className="portico-sidebar-tagline mb-0">Résumé vault · pipeline · LLM</p>
+            <p className="portico-sidebar-tagline mb-0">Resume vault · pipeline · LLM</p>
           </div>
         </div>
         <nav className="portico-nav flex-grow-1" aria-label="Main">
           <NavLink
             to="/agents/jobshunt"
             className={({ isActive }) => (isActive ? 'portico-nav-link active' : 'portico-nav-link')}
-            title="Résumé tailoring"
+            title="Resume tailoring"
           >
             <span className="portico-nav-ico">
               <IconBriefcase />
