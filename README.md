@@ -6,6 +6,10 @@
 
 Typical flow: set a **resume vault** (directory or one file), capture a posting (**URL** or paste), then use the UI to **draft**, **evaluate**, **refine**, track applications in a **pipeline**, and **export** artifacts. Data stays under paths you control (YAML + JSON on disk).
 
+> [!CAUTION]
+> **This project is a work in progress.** For security purposes, you should assume the current codebase contains vulnerabilities. Security enhancements, hardening, and bug fixes are ongoing. Run this software only in environments you trust.
+>
+
 ### Capabilities
 
 - **Evaluation (structured JSON)** — Overall score **1.0–5.0**, dimension rows **1–5** with short labels and rationales, narrative fields (role summary, vault match, gaps, interview prep, story candidates), and a machine suggestion **`apply` / `maybe` / `skip`** plus rationale. Output quality depends on your materials, the posting text, and the model.
@@ -25,7 +29,13 @@ Configuration paths and **secrets** belong in **your** machine only — see [Con
 
 ## Responsible use
 
-Outputs are **suggestions**. Review every draft and evaluation before you apply or send anything. The app does **not** submit applications for you unless you deliberately enable an optional local **apply-helper** script (disabled by default; run only code you trust).
+Outputs are suggestions: AI-generated content can be inaccurate. Review every draft, evaluation, and recommendation before applying or sending materials to employers.
+
+No Auto-Submission: The app does not submit applications for you. It is designed for manual oversight.
+
+Apply-Helper Scripts: While an optional local apply-helper script exists, it is disabled by default. Do not enable or run any helper scripts unless you have audited the code and trust the execution environment.
+
+Data Privacy: While JobsHunt is local-first, it communicates with third-party LLM providers via API. Ensure you are comfortable with the privacy policy of the providers you configure in your AI settings.
 
 ---
 
